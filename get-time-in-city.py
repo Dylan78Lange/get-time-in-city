@@ -12,6 +12,10 @@ def get_city_timezones():
             city_timezones[city.lower()] = tz
     return city_timezones
 
+def capitalize_each_word(s):
+    """Capitalize the first letter of each word in a string."""
+    return ' '.join(word.capitalize() for word in s.split())
+
 def get_time_in_city(city, user_time=None, debug=False):
     try:
         # Get the current time in the user's timezone or use the provided time
@@ -21,14 +25,6 @@ def get_time_in_city(city, user_time=None, debug=False):
         elif user_time.strip():  # Check if the provided time is a non-empty string
             user_time = datetime.strptime(user_time, "%Y-%m-%d %H:%M:%S")
             print(f"Using user-provided time: {user_time.strftime('%Y-%m-%d %H:%M:%S')}")
-        else:
-            raise ValueError("Invalid time format")
-
-        # Print the list of available time zones for debugging
-        if debug:
-            print("Available time zones:")
-            for tz in pytz.all_timezones:
-                print(tz)
 
         # Validate the city name
         if not city:
@@ -48,7 +44,9 @@ def get_time_in_city(city, user_time=None, debug=False):
         # Convert the user's time to the city's timezone
         city_time = user_time.astimezone(pytz.timezone(city_timezone))
 
-        return f"The current time in {city} is {city_time.strftime('%Y-%m-%d %H:%M:%S')}"
+        # Capitalize the first letter of each word in the city name
+        formatted_city = capitalize_each_word(city)
+        return f"The current time in {formatted_city} is {city_time.strftime('%Y-%m-%d %H:%M:%S')}"
 
     except ValueError as ve:
         return f"Error: {ve}"
