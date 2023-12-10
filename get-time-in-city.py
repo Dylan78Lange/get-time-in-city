@@ -5,8 +5,12 @@ def get_time_in_city(city, user_time=None):
     # Get the current time in the user's timezone or use the provided time
     if user_time is None:
         user_time = datetime.now()
-    else:
+        print(f"Using local time: {user_time.strftime('%Y-%m-%d %H:%M:%S')}")
+    elif user_time.strip():  # Check if the provided time is a non-empty string
         user_time = datetime.strptime(user_time, "%Y-%m-%d %H:%M:%S")
+        print(f"Using user-provided time: {user_time.strftime('%Y-%m-%d %H:%M:%S')}")
+    else:
+        return "Error: Invalid time format"
 
     # Define the timezone for the user's city
     try:
