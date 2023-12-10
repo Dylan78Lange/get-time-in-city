@@ -14,7 +14,14 @@ def get_time_in_city(city, user_time=None):
 
     # Define the timezone for the user's city
     try:
-        city_timezone = pytz.timezone(city)
+        if "Europe" in city:
+            city_timezone = pytz.timezone(f'{city}')
+        elif "America" in city:
+            city_timezone = pytz.timezone(f'{city}')
+        elif "Africa" in city:
+            city_timezone = pytz.timezone(f'{city}')
+        else:
+            return f"Error: Timezone not found for {city}"
     except pytz.UnknownTimeZoneError:
         return f"Error: Timezone not found for {city}"
 
@@ -25,7 +32,7 @@ def get_time_in_city(city, user_time=None):
 
 if __name__ == "__main__":
     # Get user input for city and time
-    city_name = input("Enter the city name: ")
+    city_name = input("Enter the city name (e.g., Paris, Los_Angeles, Johannesburg): ")
     user_input_time = input("Enter the time in the format 'YYYY-MM-DD HH:MM:SS' (Press Enter for current time): ")
 
     # Call the function to get the time in the specified city
