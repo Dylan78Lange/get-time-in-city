@@ -1,13 +1,16 @@
 from datetime import datetime
 import pytz
 
-# Mapping of common city names to time zones
-city_timezones = {
-    'Paris': 'Europe/Paris',
-    'Los_Angeles': 'America/Los_Angeles',
-    'Johannesburg': 'Africa/Johannesburg',
-    # Add more cities as needed
-}
+def get_city_timezones():
+    """Dynamically fetch and return a dictionary of city names and their time zones."""
+    city_timezones = {}
+    for tz in pytz.all_timezones:
+        # Extract the city name from the time zone
+        parts = tz.split('/')
+        if len(parts) > 1:
+            city = parts[-1].replace('_', ' ')
+            city_timezones[city.lower()] = tz
+    return city_timezones
 
 def get_time_in_city(city, user_time=None, debug=False):
     try:
@@ -31,8 +34,14 @@ def get_time_in_city(city, user_time=None, debug=False):
         if not city:
             raise ValueError("City name cannot be empty")
 
+        # Get the dynamically generated city time zones
+        city_timezones = get_city_timezones()
+
+        # Make the input city name case-insensitive
+        city_lower = city.lower()
+
         # Define the timezone for the user's city using the mapping
-        city_timezone = city_timezones.get(city)
+        city_timezone = city_timezones.get(city_lower)
         if not city_timezone:
             raise ValueError(f"Timezone not found for {city}")
 
@@ -64,4 +73,3 @@ if __name__ == "__main__":
 
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
-
