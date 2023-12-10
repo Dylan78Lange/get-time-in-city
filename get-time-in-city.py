@@ -52,7 +52,15 @@ def get_time_in_city(city, user_time=None, debug=False):
 
         # Capitalize the first letter of each word in the city name
         formatted_city = capitalize_each_word(city)
-        return f"The current time in {formatted_city} is {city_time.strftime('%Y-%m-%d %H:%M:%S')}"
+        result = f"The current time in {formatted_city} is {city_time.strftime('%Y-%m-%d %H:%M:%S')}"
+
+        # Print available time zones if debug is True
+        if debug:
+            print("Available time zones:")
+            for city_name in sorted(city_timezones.keys()):
+                print(f"  {city_name}")
+
+        return result
 
     except ValueError as ve:
         return f"Error: {ve}"
